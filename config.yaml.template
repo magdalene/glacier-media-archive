@@ -1,0 +1,18 @@
+salt: "salt"
+encryption_password: "password"
+bucket: "bucket"
+storage_class: "DEEP_ARCHIVE"
+metadata_dir: "./metadata"
+#Mbit/s
+upload_speed: "20"
+stop_time: "07:30"
+paths:
+  - path: "/media/somepath/Movies"
+    prefix: "m"
+    type: "movie"
+  - path: "/media/somepath/Series"
+    prefix: "s"
+    type: "series"
+  - path: "/media/somepath/Music"
+    prefix: "u"
+    type: "music"
