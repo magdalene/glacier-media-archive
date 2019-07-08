@@ -50,6 +50,8 @@ def upload_file(local_filepath, key_prefix):
 
 
 def write_metadata(hashed_filename, filename, prefix, original_path, _type):
+    if not os.path.exists(os.path.join(METADATA_DIR, prefix)):
+        os.makedirs(os.path.join(METADATA_DIR, prefix))
     with open(os.path.join(METADATA_DIR, prefix, hashed_filename), 'wt') as f:
         json.dump({
             "original_path": original_path,
