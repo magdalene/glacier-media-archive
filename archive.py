@@ -61,8 +61,9 @@ def write_metadata(hashed_filename, filename, prefix, original_path, _type):
 def check_time(directory, path_in_dir):
     file_bytes = os.stat(os.path.join(directory, path_in_dir)).st_size
     time_to_upload_seconds = file_bytes * 8 / (1000000 * int(UPLOAD_MBIT_PER_SECOND))
-    time_left = (stop_time - datetime.now()).seconds
-    return time_left > time_to_upload_seconds
+    now = datetime.now()
+    time_left = (stop_time - now).seconds
+    return stop_time > now and time_left > time_to_upload_seconds
 
 
 def is_already_uploaded(hashed_filename, prefix):
@@ -72,7 +73,7 @@ def is_already_uploaded(hashed_filename, prefix):
 def archive_file(directory, path_in_dir, prefix, _type):
     hashed_filename = get_hashed_filename(path_in_dir)
     encrypted_filepath = os.path.join('/tmp', hashed_filename)
-    if is_already_uploaded(encrypted_filepath, prefix):
+    if is_already_uploaded(hashed_filename, prefix):
         return
     logger.info("Working on archiving {_type} {directory}/{path_in_dir}".format(
         _type=_type, directory=directory, path_in_dir=path_in_dir))
@@ -103,6 +104,7 @@ def get_files(directory):
 
 def main():
     _set_stop_time()
+    logger.info("Stopping by {}".format(stop_time))
     for path_info in PATHS:
         filenames = get_files(path_info['path'])
         for filename in filenames:
