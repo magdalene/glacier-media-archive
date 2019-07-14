@@ -40,8 +40,11 @@ def get_hashed_filename(filename):
 
 
 def encrypt_file(input_filename, output_filename, password=PASSWORD):
-    subprocess.call(['openssl', 'enc', '-aes-128-cbc', '-salt', '-in',
-                     input_filename, '-out', output_filename, '-k', PASSWORD])
+    # NOTE: we would prefer not to use md5 here, but we already started archiving
+    # like this because the server had an old openssl version. We don't actually
+    # care a lot about security here, so we're moving forward with this.
+    subprocess.call(['openssl', 'enc', '-md', 'md5', '-aes-128-cbc', '-salt', '-in',
+                     input_filename, '-out', output_filename, '-k', password])
 
 
 def upload_file(local_filepath, key_prefix):
